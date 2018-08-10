@@ -1,9 +1,12 @@
 package com.kucingapes.simplequicknote;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,8 +40,32 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int i) {
+    public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") final int i) {
         final ModelHistory modelHistory = stringList.get(i);
+
+        @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(context)
+                .inflate(R.layout.delete_dialog, null);
+
+        TextView textView = dialogView.findViewById(R.id.messege);
+        textView.setText(modelHistory.getText());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (stringList.size() == 1) {
+                    Toast.makeText(context, "item can't deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    stringList.remove(i);
+                    notifyItemRemoved(i);
+                    SharedList sharedList = new SharedList();
+                    sharedList.removeFavorite(context, i);
+                    Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+
         holder.item.setText(modelHistory.getText());
         holder.date.setText(modelHistory.getDate());
         view.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +80,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
             }
         });
         holder.cardView.setCardBackgroundColor(modelHistory.getColor());
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                dialog.show();
+                return true;
+            }
+        });
     }
+
 
     public boolean contains(List<ModelHistory> list, String result) {
         for (ModelHistory model : list) {

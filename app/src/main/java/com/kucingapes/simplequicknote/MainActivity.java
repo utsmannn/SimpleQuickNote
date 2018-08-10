@@ -199,8 +199,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         HomeWatcher mHomeWatcher = new HomeWatcher(this);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override

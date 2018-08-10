@@ -64,4 +64,12 @@ public class SharedList {
         editor.apply();
     }
 
+    public void removeFavorite(Context context, int pos) {
+        ArrayList<ModelHistory> favorites = getFavorites(context);
+        if (favorites != null) {
+            favorites.remove(pos);
+            saveFavorites(context, favorites);
+        }
+    }
+
 }

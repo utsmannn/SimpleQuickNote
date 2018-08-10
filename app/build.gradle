@@ -6,8 +6,8 @@ android {
         applicationId "com.kucingapes.simplequicknote"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.4"
+        versionCode 4
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

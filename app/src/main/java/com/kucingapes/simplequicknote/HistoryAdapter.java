@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
                 }
             }
         });
-
+        holder.cardView.setCardBackgroundColor(modelHistory.getColor());
     }
 
     public boolean contains(List<ModelHistory> list, String result) {
@@ -70,10 +71,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
 
     public class Holder extends RecyclerView.ViewHolder {
         TextView item, date;
+        CardView cardView;
         public Holder(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.item_history);
             date = itemView.findViewById(R.id.date);
+            cardView = itemView.findViewById(R.id.card);
         }
     }
 }

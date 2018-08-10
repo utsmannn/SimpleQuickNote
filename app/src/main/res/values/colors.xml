@@ -7,5 +7,54 @@
     <color name="text">#4d4d4d</color>
     <color name="tint">#919191</color>
     <color name="transparent">#00000000</color>
-    <color name="card">#f8fad3</color>
+    <color name="card">#FFF59D</color>
+
+    <!--<item name="blue" type="color">#FF33B5E5</item>
+    <item name="purple" type="color">#FFAA66CC</item>
+    <item name="green" type="color">#FF99CC00</item>
+    <item name="orange" type="color">#c6ae16</item>
+    <item name="red" type="color">#FFFF4444</item>
+    <item name="darkblue" type="color">#FF0099CC</item>
+    <item name="darkpurple" type="color">#FF9933CC</item>
+    <item name="darkgreen" type="color">#FF669900</item>
+    <item name="darkorange" type="color">#FFFF8800</item>-->
+
+    <color name="color_1">#EF9A9A</color>
+    <color name="color_2">#F48FB1</color>
+    <color name="color_3">#CE93D8</color>
+    <color name="color_4">#B39DDB</color>
+    <color name="color_5">#9FA8DA</color>
+    <color name="color_6">#90CAF9</color>
+    <color name="color_7">#E6EE9C</color>
+    <color name="color_8">#81D4FA</color>
+    <color name="color_9">#80DEEA</color>
+    <color name="color_10">#80CBC4</color>
+    <color name="color_11">#A5D6A7</color>
+    <color name="color_12">#C5E1A5</color>
+    <color name="color_13">#81D4FA</color>
+    <color name="color_14">#FFF59D</color>
+    <color name="color_15">#FFE082</color>
+    <color name="color_16">#FFCC80</color>
+    <color name="color_17">#FFAB91</color>
+
+    <integer-array name="androidcolors">
+        <item>@color/color_1</item>
+        <item>@color/color_2</item>
+        <item>@color/color_3</item>
+        <item>@color/color_4</item>
+        <item>@color/color_5</item>
+        <item>@color/color_6</item>
+        <item>@color/color_7</item>
+        <item>@color/color_8</item>
+        <item>@color/color_9</item>
+        <item>@color/color_10</item>
+        <item>@color/color_11</item>
+        <item>@color/color_12</item>
+        <item>@color/color_13</item>
+        <item>@color/color_14</item>
+        <item>@color/color_15</item>
+        <item>@color/color_16</item>
+        <item>@color/color_17</item>
+    </integer-array>
+
 </resources>

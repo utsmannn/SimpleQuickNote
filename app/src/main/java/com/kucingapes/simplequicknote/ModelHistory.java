@@ -4,10 +4,12 @@ public class ModelHistory {
 
     private String text;
     private String date;
+    private int color;
 
-    public ModelHistory(String text, String date) {
+    public ModelHistory(String text, String date, int color) {
         this.text = text;
         this.date = date;
+        this.color = color;
     }
 
     public ModelHistory() {
@@ -27,5 +29,13 @@ public class ModelHistory {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

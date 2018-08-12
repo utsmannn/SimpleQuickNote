@@ -1,9 +1,11 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.Services;
 
 import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.TileService;
 import android.support.annotation.RequiresApi;
+
+import com.kucingapes.simplequicknote.Activity.MainActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class QuickSetting extends TileService {
@@ -36,7 +38,7 @@ public class QuickSetting extends TileService {
         super.onClick();
 
         /*Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("com.kucingapes.simplequicknote.OptionActivity");*/
+        intent.setType("com.kucingapes.simplequicknote.Activity.OptionActivity");*/
         startActivityAndCollapse(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

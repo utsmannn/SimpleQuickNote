@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OptionActivity">
+    tools:context=".Activity.OptionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -41,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Program by"
+                    android:text="Programming"
                     android:textStyle="bold" />
 
                 <TextView
@@ -76,10 +77,58 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="20dp"
-                    android:src="@drawable/web_hi_res_512" />
+                    android:src="@drawable/web_hi_res_512"
+                    android:id="@+id/logo"/>
 
             </RelativeLayout>
         </LinearLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign for enable backup"
+            android:layout_margin="5dp"
+            android:id="@+id/sign_btn"
+            android:theme="@style/MyButton"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/google_icon"
+            android:drawableStart="@drawable/google_icon"
+            android:drawablePadding="10dp"
+            android:drawableTint="#fff"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Backup now"
+            android:layout_margin="5dp"
+            android:id="@+id/btn_backup"
+            android:theme="@style/MyButton"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/upload"
+            android:drawableStart="@drawable/upload"
+            android:drawablePadding="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You sign as ssss"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/sign_name"/>
+
+        <ProgressBar
+            android:id="@+id/progbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="50dp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_backup"/>
+
     </LinearLayout>
+
 </android.support.v4.widget.NestedScrollView>

@@ -3,6 +3,7 @@
     package="com.kucingapes.simplequicknote">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,10 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OptionActivity" />
+        <activity android:name=".Activity.OptionActivity" />
 
         <receiver
-            android:name=".BootReceiver"
+            android:name=".Services.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -32,7 +33,7 @@
         </receiver>
 
         <service
-            android:name=".QuickSetting"
+            android:name=".Services.QuickSetting"
             android:icon="@drawable/icon_anydpi"
             android:label="Add Note"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -41,7 +42,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ListNotes"
+        <activity android:name=".Activity.ListNotes"
             android:label="All Notes"/>
     </application>
 

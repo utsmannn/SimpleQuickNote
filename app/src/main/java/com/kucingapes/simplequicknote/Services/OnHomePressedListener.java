@@ -1,4 +1,4 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.Services;
 
 public interface OnHomePressedListener {
     public void onHomePressed();

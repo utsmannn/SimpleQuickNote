@@ -1,8 +1,10 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.Services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.kucingapes.simplequicknote.Activity.MainActivity;
 
 public class BootReceiver extends BroadcastReceiver {
 

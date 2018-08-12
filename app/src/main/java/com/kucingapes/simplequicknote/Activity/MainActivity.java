@@ -1,49 +1,40 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.Activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.kucingapes.simplequicknote.Adapter.HistoryAdapter;
+import com.kucingapes.simplequicknote.Model.ModelHistory;
+import com.kucingapes.simplequicknote.R;
+import com.kucingapes.simplequicknote.Services.HomeWatcher;
+import com.kucingapes.simplequicknote.Services.OnHomePressedListener;
+import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         final SharedPreferences preferences = getSharedPreferences("ganteng", MODE_PRIVATE);
         final SharedPreferences.Editor editor = preferences.edit();
@@ -75,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageView share = dialogView.findViewById(R.id.share);
         final ImageView listNote = dialogView.findViewById(R.id.all_note);
         final ImageView info = dialogView.findViewById(R.id.option);
+        final ImageView newNote = dialogView.findViewById(R.id.note_new);
 
         final EditText editText = dialogView.findViewById(R.id.text_edit);
         editText.setHint("Text here");
@@ -96,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         share.setColorFilter(defaultColor);
         listNote.setColorFilter(defaultColor);
         info.setColorFilter(defaultColor);
+        newNote.setColorFilter(defaultColor);
 
 
         addNotification(getApplicationContext());
@@ -139,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        newNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setupListHistory(editText, editor, preferences, dialogView);
+                editText.setText("");
+            }
+        });
+
         colorSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 share.setColorFilter(randomColor);
                 listNote.setColorFilter(randomColor);
                 info.setColorFilter(randomColor);
+                newNote.setColorFilter(randomColor);
             }
         });
 

@@ -1,12 +1,11 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.SharedPreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.kucingapes.simplequicknote.Model.ModelHistory;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

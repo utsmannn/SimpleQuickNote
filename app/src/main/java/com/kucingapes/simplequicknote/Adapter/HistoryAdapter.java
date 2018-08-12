@@ -1,4 +1,4 @@
-package com.kucingapes.simplequicknote;
+package com.kucingapes.simplequicknote.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -15,9 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kucingapes.simplequicknote.Model.ModelHistory;
+import com.kucingapes.simplequicknote.R;
+import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
+
 import java.util.List;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
+public class
+HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     private List<ModelHistory> stringList;
     private Context context;
     private View view;

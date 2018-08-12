@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "857978180580",
+    "firebase_url": "https://simplequicknote.firebaseio.com",
+    "project_id": "simplequicknote",
+    "storage_bucket": "simplequicknote.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857978180580:android:c8d0a8939b1726a8",
+        "android_client_info": {
+          "package_name": "com.kucingapes.simplequicknote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857978180580-addika60leesbp93543l46chs3uluee1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kucingapes.simplequicknote",
+            "certificate_hash": "80ed2ea420a8c6ae7ebbc873752ae06f43423d70"
+          }
+        },
+        {
+          "client_id": "857978180580-tn1v2v7qds8dogblrma9tmlsot3gqjjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1-lgbn8J2N3974PFt441wGeQUphL4FPY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857978180580-tn1v2v7qds8dogblrma9tmlsot3gqjjv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

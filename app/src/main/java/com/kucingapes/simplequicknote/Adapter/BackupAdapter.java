@@ -1,13 +1,16 @@
 package com.kucingapes.simplequicknote.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kucingapes.simplequicknote.Activity.ListNotes;
 import com.kucingapes.simplequicknote.Activity.OptionActivity;
 import com.kucingapes.simplequicknote.Model.ModelBackup;
 import com.kucingapes.simplequicknote.R;
@@ -65,6 +69,8 @@ public class BackupAdapter extends RecyclerView.Adapter<BackupAdapter.Holder> {
                     public void run() {
                         hideProgressDialog();
                         Toast.makeText(context, "Restored", Toast.LENGTH_SHORT).show();
+                        context.startActivity(new Intent(context, ListNotes.class));
+                        ((AppCompatActivity)context).finish();
                     }
                 }, 1000);
             }

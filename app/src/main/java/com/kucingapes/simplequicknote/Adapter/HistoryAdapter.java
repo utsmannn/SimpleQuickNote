@@ -32,7 +32,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         this.context = context;
     }
 
-    public HistoryAdapter(){
+    public HistoryAdapter() {
         super();
     }
 
@@ -48,28 +48,11 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") final int i) {
         final ModelHistory modelHistory = stringList.get(i);
 
-        @SuppressLint("InflateParams") View dialogView = LayoutInflater.from(context)
+        @SuppressLint("InflateParams") final View dialogView = LayoutInflater.from(context)
                 .inflate(R.layout.delete_dialog, null);
 
         TextView textView = dialogView.findViewById(R.id.messege);
         textView.setText(modelHistory.getText());
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (stringList.size() == 1) {
-                    Toast.makeText(context, "item can't deleted", Toast.LENGTH_SHORT).show();
-                } else {
-                    stringList.remove(i);
-                    notifyItemRemoved(i);
-                    SharedList sharedList = new SharedList();
-                    sharedList.removeFavorite(context, i);
-                    Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        final AlertDialog dialog = builder.create();
 
         holder.item.setText(modelHistory.getText());
         holder.date.setText(modelHistory.getDate());
@@ -88,6 +71,65 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setView(dialogView).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (stringList.size() == 0) {
+                            SharedList sharedList = new SharedList();
+                            sharedList.removeFavorite(context, 1);
+                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            stringList.remove(i);
+                            notifyItemRemoved(i);
+                            SharedList sharedList = new SharedList();
+                            sharedList.removeFavorite(context, i-1);
+                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                final AlertDialog dialog = builder.create();*/
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Remove item");
+                builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        /*if (stringList.size() == 0) {
+                            stringList.remove(i);
+                            notifyItemRemoved(i);
+                            notifyItemRangeChanged(i, stringList.size());
+                            SharedList sharedList = new SharedList();
+                            sharedList.removeFavorite(context, 1);
+                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            stringList.remove(i);
+                            notifyItemRemoved(i);
+                            notifyItemRangeChanged(i, stringList.size());
+                            SharedList sharedList = new SharedList();
+                            sharedList.removeFavorite(context, i-1);
+                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+                        }*/
+                        /*SharedList sharedList = new SharedList();
+                        Toast.makeText(context,
+                                String.valueOf(stringList.size()+" "+sharedList.getSize(context)), Toast.LENGTH_SHORT).show();*/
+
+                        stringList.remove(i);
+                        notifyItemRemoved(i);
+                        notifyItemRangeChanged(i, stringList.size());
+                        SharedList sharedList = new SharedList();
+                        sharedList.removeFavorite(context, i);
+                        Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
             }
@@ -112,6 +154,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     public class Holder extends RecyclerView.ViewHolder {
         TextView item, date;
         CardView cardView;
+
         public Holder(@NonNull View itemView) {
             super(itemView);
             item = itemView.findViewById(R.id.item_history);

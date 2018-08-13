@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kucingapes.simplequicknote.Model.ModelHistory;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,10 +31,13 @@ public class SharedList {
             String jsonFavorites = settings.getString(KEY, null);
             Gson gson = new Gson();
 
-            ModelHistory[] favoriteItems = gson.fromJson(jsonFavorites,
+            Type type = new TypeToken<List<ModelHistory>>() {}.getType();
+            favorites = gson.fromJson(jsonFavorites, type);
+
+            /*ModelHistory[] favoriteItems = gson.fromJson(jsonFavorites,
                     ModelHistory[].class);
             favorites = Arrays.asList(favoriteItems);
-            favorites = new ArrayList<>(favorites);
+            favorites = new ArrayList<>(favorites);*/
         } else
             return null;
 
@@ -69,6 +74,11 @@ public class SharedList {
             favorites.remove(pos);
             saveFavorites(context, favorites);
         }
+    }
+
+    public int getSize(Context context) {
+        ArrayList<ModelHistory> favorites = getFavorites(context);
+        return favorites.size();
     }
 
 }

@@ -130,7 +130,7 @@ public class OptionActivity extends AppCompatActivity {
         marginDecoration.setPadding(recyclerView, 10);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(false);
-        //recyclerView.addItemDecoration(marginDecoration);
+        recyclerView.addItemDecoration(marginDecoration);
 
         if (user != null) {
             String authName = user.getDisplayName();
@@ -150,8 +150,7 @@ public class OptionActivity extends AppCompatActivity {
 
                         }
                         findViewById(R.id.progbar).setVisibility(View.GONE);
-                        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(),
-                                DividerItemDecoration.VERTICAL));
+
                         recyclerView.setAdapter(adapter);
                         Collections.reverse(backupList);
                         adapter.notifyDataSetChanged();

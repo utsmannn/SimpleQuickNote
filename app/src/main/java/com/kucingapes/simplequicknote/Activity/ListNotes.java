@@ -2,6 +2,7 @@ package com.kucingapes.simplequicknote.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +11,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.kucingapes.simplequicknote.Adapter.HistoryAdapter;
 import com.kucingapes.simplequicknote.Model.ModelHistory;
+import com.kucingapes.simplequicknote.OnItemClickListener;
 import com.kucingapes.simplequicknote.R;
 import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 import com.thekhaeng.recyclerviewmargin.LayoutMarginDecoration;
@@ -61,15 +64,37 @@ public class ListNotes extends AppCompatActivity {
             findViewById(R.id.empty).setVisibility(View.GONE);
         }
 
-
-
         adapter = new HistoryAdapter(stringList, this);
+        //Collections.reverse(stringList);
 
         if (stringList.size() > 0) {
             sortListByDate(stringList);
         }
+
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        /*Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String note = bundle.getString("note");
+            String date = bundle.getString("date");
+            int color = bundle.getInt("color");
+            int size = stringList.size();
+
+            ModelHistory modelHistory = new ModelHistory(note, date, color, size);
+            //sharedList.addFavorite(getApplicationContext(), modelHistory);
+            stringList.add(modelHistory);
+            sharedList.saveFavorites(getApplicationContext(), stringList);
+
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            //Toast.makeText(this, note, Toast.LENGTH_SHORT).show();
+            //recreate();
+        } else {
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }*/
     }
 
     private void sortListByDate(ArrayList<ModelHistory> arrayList) {
@@ -77,18 +102,18 @@ public class ListNotes extends AppCompatActivity {
             @SuppressLint("SimpleDateFormat")
             @Override
             public int compare(ModelHistory modelHistory, ModelHistory t1) {
-                String dateString1 = modelHistory.getDate();
+                /*String dateString1 = modelHistory.getDate();
                 String dateString2 = t1.getDate();
 
                 Date date1 = null;
                 try {
-                    date1 = new SimpleDateFormat("dd MMMM YYYY / hh:mm").parse(dateString1);
+                    date1 = new SimpleDateFormat("dd MMMM YYYY / HH:mm:ss").parse(dateString1);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 Date date2 = null;
                 try {
-                    date2 = new SimpleDateFormat("dd MMMM YYYY / hh:mm").parse(dateString2);
+                    date2 = new SimpleDateFormat("dd MMMM YYYY / HH:mm:ss").parse(dateString2);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -100,9 +125,9 @@ public class ListNotes extends AppCompatActivity {
                 long milis2 = 0;
                 if (date2 != null) {
                     milis2 = date2.getTime();
-                }
+                }*/
 
-                return milis1 > milis2 ? -1 : 0;
+                return modelHistory.getId() > t1.getId() ? -1 : 0;
             }
         });
     }
@@ -122,6 +147,61 @@ public class ListNotes extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                SharedList sharedList = new SharedList();
+
+                long mDate = System.currentTimeMillis();
+
+                String note = data.getStringExtra("note");
+                String date = data.getStringExtra("date");
+                int color = data.getIntExtra("color", getResources().getColor(R.color.card));
+                int pos = data.getIntExtra("position", 0);
+                int id = data.getIntExtra("id", (int) mDate);
+
+                stringList.remove(pos);
+                adapter.notifyItemRemoved(pos);
+                ModelHistory modelHistory = new ModelHistory(note, date, color, id);
+                //stringList.add(modelHistory);
+                stringList.add(modelHistory);
+                //adapter.notifyItemMoved(stringList.size(), 0);
+                adapter.notifyItemRangeRemoved(pos, stringList.size());
+
+                sharedList.saveFavorites(getApplicationContext(), stringList);
+
+                if (stringList.size() > 0) {
+                    sortListByDate(stringList);
+                    adapter.notifyDataSetChanged();
+                }
+
+                /*new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ListNotes.this, "nh", Toast.LENGTH_SHORT).show();
+                        if (stringList.size() > 0) {
+                            sortListByDate(stringList);
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        //finish();
+                        //startActivity(new Intent(getApplicationContext(), ListNotes.class));
+                    }
+                }, 1000);*/
+
+                //sortListByDate(stringList);
+
+                /*if (stringList.size() > 0) {
+                }*/
+
+                //recreate();
+
+                //Toast.makeText(this, note+" "+date, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

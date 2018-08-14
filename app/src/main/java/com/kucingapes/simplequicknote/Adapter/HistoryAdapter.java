@@ -5,8 +5,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kucingapes.simplequicknote.Activity.DetailNote;
 import com.kucingapes.simplequicknote.Model.ModelHistory;
+import com.kucingapes.simplequicknote.OnItemClickListener;
 import com.kucingapes.simplequicknote.R;
 import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 
@@ -24,6 +29,7 @@ import java.util.List;
 public class
 HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     private List<ModelHistory> stringList;
+    private OnItemClickListener listener;
     private Context context;
     private View view;
 
@@ -31,6 +37,12 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         this.stringList = stringList;
         this.context = context;
     }
+
+    /*public HistoryAdapter(List<ModelHistory> stringList, OnItemClickListener listener, Context context) {
+        this.stringList = stringList;
+        this.listener = listener;
+        this.context = context;
+    }*/
 
     public HistoryAdapter() {
         super();
@@ -56,19 +68,32 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
 
         holder.item.setText(modelHistory.getText());
         holder.date.setText(modelHistory.getDate());
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                //listener.onItemClick(modelHistory);
+
+                /*ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(modelHistory.getDate(), modelHistory.getText());
                 if (clipboard != null) {
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+                Intent intent = new Intent(context, DetailNote.class);
+                intent.putExtra("note", modelHistory.getText());
+                intent.putExtra("date", modelHistory.getDate());
+                intent.putExtra("color", modelHistory.getColor());
+                intent.putExtra("position", holder.getAdapterPosition());
+                intent.putExtra("size", stringList.size());
+                intent.putExtra("id", modelHistory.getId());
+                //context.startActivity(intent);
+                ((AppCompatActivity)context).startActivityForResult(intent,  1);
+                //((AppCompatActivity)context).finish();
             }
         });
         holder.cardView.setCardBackgroundColor(modelHistory.getColor());
-        view.setOnLongClickListener(new View.OnLongClickListener() {
+        /*view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
 
@@ -77,26 +102,6 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
                 builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SharedList sharedList = new SharedList();
-                        /*if (i == stringList.size()) {
-                            stringList.remove(i);
-                            notifyItemRemoved(i);
-                            notifyItemRangeChanged(i, stringList.size());
-                            sharedList.removeFavorite(context, i);
-                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-                        } else {
-                            stringList.remove(i);
-                            notifyItemRemoved(i);
-                            notifyItemRangeChanged(i, stringList.size());
-                            sharedList.removeFavorite(context, i+1);
-                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-                        }*/
-
-                        /*stringList.remove(i);
-                        sharedList.removeFavorite(context, i);
-
-                        notifyItemRemoved(i);
-                        notifyItemRangeChanged(i, stringList.size());*/
-                        //Toast.makeText(context,  String.valueOf(holder.getLayoutPosition()), Toast.LENGTH_SHORT).show();
 
                         stringList.remove(holder.getAdapterPosition());
                         notifyItemRemoved(i);
@@ -104,6 +109,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
                         sharedList.clearFavorite(context);
                         sharedList.saveFavorites(context, stringList);
                         Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -116,7 +122,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
                 dialog.show();
                 return true;
             }
-        });
+        });*/
     }
 
 

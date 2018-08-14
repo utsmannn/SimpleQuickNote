@@ -34,13 +34,13 @@ import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private String KEY = "resultKey";
-    private String INDEX = "listhistory";
     private String COLOR_KEY = "colorResult";
 
     @Override
@@ -97,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                setupListHistory(editText, editor, preferences, dialogView);
+                RelativeLayout relativeLayout = dialogView.findViewById(R.id.layout_dialog);
+                Drawable drawable = relativeLayout.getBackground();
+                setupListHistory(editText, editor, preferences, drawable, getApplicationContext());
                 MainActivity.this.finish();
             }
         });
@@ -134,7 +136,9 @@ public class MainActivity extends AppCompatActivity {
         newNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setupListHistory(editText, editor, preferences, dialogView);
+                RelativeLayout relativeLayout = dialogView.findViewById(R.id.layout_dialog);
+                Drawable drawable = relativeLayout.getBackground();
+                setupListHistory(editText, editor, preferences, drawable, getApplicationContext());
                 editText.setText("");
             }
         });
@@ -185,7 +189,9 @@ public class MainActivity extends AppCompatActivity {
         listNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setupListHistory(editText, editor, preferences, dialogView);
+                RelativeLayout relativeLayout = dialogView.findViewById(R.id.layout_dialog);
+                Drawable drawable = relativeLayout.getBackground();
+                setupListHistory(editText, editor, preferences, drawable, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), ListNotes.class));
                 finish();
             }
@@ -194,7 +200,9 @@ public class MainActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setupListHistory(editText, editor, preferences, dialogView);
+                RelativeLayout relativeLayout = dialogView.findViewById(R.id.layout_dialog);
+                Drawable drawable = relativeLayout.getBackground();
+                setupListHistory(editText, editor, preferences, drawable, getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), OptionActivity.class));
                 finish();
             }
@@ -244,19 +252,20 @@ public class MainActivity extends AppCompatActivity {
         mHomeWatcher.startWatch();
     }
 
-    private void setupListHistory(EditText editText, SharedPreferences.Editor editor, SharedPreferences preferences, View dialogView) {
+    @SuppressLint("SimpleDateFormat")
+    public void setupListHistory(EditText editText, SharedPreferences.Editor editor,
+                                 SharedPreferences preferences, Drawable drawable, Context context) {
         Calendar c = Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM YYYY / hh:mm");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM YYYY / HH:mm");
         String strDate = sdf.format(c.getTime());
+        long toId = System.currentTimeMillis();
 
         String result = editText.getText().toString();
         if (result.length() == 0) {
             result = "";
         }
 
-        RelativeLayout relativeLayout = dialogView.findViewById(R.id.layout_dialog);
-        Drawable drawable = relativeLayout.getBackground();
         if (drawable instanceof ColorDrawable) {
             int color = ((ColorDrawable) drawable).getColor();
 
@@ -264,17 +273,17 @@ public class MainActivity extends AppCompatActivity {
             editor.putInt(COLOR_KEY, color);
             editor.apply();
 
+            String INDEX = "listhistory";
             String json = preferences.getString(INDEX, null);
 
             SharedList sharedList = new SharedList();
-            List<ModelHistory> modelHistories = sharedList.getFavorites(getApplicationContext());
+            List<ModelHistory> modelHistories = sharedList.getFavorites(context);
 
             if (modelHistories == null) {
                 modelHistories = new ArrayList<>();
             }
 
-            int id = modelHistories.size();
-
+            int id = (int) toId;
             ModelHistory modelHistory = new ModelHistory(result, strDate, color, id);
 
 
@@ -282,18 +291,16 @@ public class MainActivity extends AppCompatActivity {
                 if (!result.equals("")) {
                     HistoryAdapter adapter = new HistoryAdapter();
                     if (!adapter.contains(modelHistories, result)) {
-                        sharedList.addFavorite(getApplicationContext(), modelHistory);
+                        sharedList.addFavorite(context, modelHistory);
                     }
                 }
             } else {
                 if (!result.equals("")) {
-                    sharedList.addFavorite(getApplicationContext(), modelHistory);
+                    sharedList.addFavorite(context, modelHistory);
                 }
             }
         }
-
-        addNotification(getApplicationContext());
-
+        addNotification(context);
     }
 
     public static void addNotification(Context context) {

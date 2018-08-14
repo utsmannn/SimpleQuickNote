@@ -75,18 +75,21 @@ public class SharedList {
     }
 
     public void removeFavorite(Context context, int pos) {
-        ArrayList<ModelHistory> favorites = getFavorites(context);
-        /*if (favorites != null) {
-            favorites.remove(pos);
-            saveFavorites(context, favorites);
-        }*/
+        List<ModelHistory> favorites = getFavorites(context);
+        if (favorites == null)
+            favorites = new ArrayList<>();
+
         favorites.remove(pos);
         saveFavorites(context, favorites);
     }
 
-    public int getSize(Context context) {
-        ArrayList<ModelHistory> favorites = getFavorites(context);
-        return favorites.size();
+
+    public List<ModelHistory> getObject(Context context, List<ModelHistory> list) {
+        list = getFavorites(context);
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        return list;
     }
 
 }

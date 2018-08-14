@@ -3,7 +3,7 @@
     package="com.kucingapes.simplequicknote">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -42,8 +42,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activity.ListNotes"
-            android:label="All Notes"/>
+        <activity
+            android:name=".Activity.ListNotes"
+            android:label="All Notes" />
+        <activity android:name=".Activity.DetailNote"></activity>
     </application>
 
 </manifest>

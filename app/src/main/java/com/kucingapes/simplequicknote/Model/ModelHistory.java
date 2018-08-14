@@ -5,6 +5,7 @@ public class ModelHistory {
     private String text;
     private String date;
     private int color;
+    private int id;
 
     public ModelHistory(String text, String date, int color) {
         this.text = text;
@@ -13,6 +14,17 @@ public class ModelHistory {
     }
 
     public ModelHistory() {
+    }
+
+    public ModelHistory(String text, String date, int color, int id) {
+        this.text = text;
+        this.date = date;
+        this.color = color;
+        this.id = id;
+    }
+
+    public ModelHistory(int id) {
+        this.id = id;
     }
 
     public String getText() {
@@ -37,5 +49,13 @@ public class ModelHistory {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

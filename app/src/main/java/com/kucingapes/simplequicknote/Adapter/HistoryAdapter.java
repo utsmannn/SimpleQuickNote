@@ -45,7 +45,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, @SuppressLint("RecyclerView") final int i) {
+    public void onBindViewHolder(@NonNull final Holder holder, @SuppressLint("RecyclerView") final int i) {
         final ModelHistory modelHistory = stringList.get(i);
 
         @SuppressLint("InflateParams") final View dialogView = LayoutInflater.from(context)
@@ -71,57 +71,40 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setView(dialogView).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if (stringList.size() == 0) {
-                            SharedList sharedList = new SharedList();
-                            sharedList.removeFavorite(context, 1);
-                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            stringList.remove(i);
-                            notifyItemRemoved(i);
-                            SharedList sharedList = new SharedList();
-                            sharedList.removeFavorite(context, i-1);
-                            Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-                final AlertDialog dialog = builder.create();*/
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Remove item");
                 builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        /*if (stringList.size() == 0) {
+                        SharedList sharedList = new SharedList();
+                        /*if (i == stringList.size()) {
                             stringList.remove(i);
                             notifyItemRemoved(i);
                             notifyItemRangeChanged(i, stringList.size());
-                            SharedList sharedList = new SharedList();
-                            sharedList.removeFavorite(context, 1);
+                            sharedList.removeFavorite(context, i);
                             Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-
                         } else {
                             stringList.remove(i);
                             notifyItemRemoved(i);
                             notifyItemRangeChanged(i, stringList.size());
-                            SharedList sharedList = new SharedList();
-                            sharedList.removeFavorite(context, i-1);
+                            sharedList.removeFavorite(context, i+1);
                             Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
                         }*/
-                        /*SharedList sharedList = new SharedList();
-                        Toast.makeText(context,
-                                String.valueOf(stringList.size()+" "+sharedList.getSize(context)), Toast.LENGTH_SHORT).show();*/
 
-                        stringList.remove(i);
+                        /*stringList.remove(i);
+                        sharedList.removeFavorite(context, i);
+
+                        notifyItemRemoved(i);
+                        notifyItemRangeChanged(i, stringList.size());*/
+                        //Toast.makeText(context,  String.valueOf(holder.getLayoutPosition()), Toast.LENGTH_SHORT).show();
+
+                        stringList.remove(holder.getAdapterPosition());
                         notifyItemRemoved(i);
                         notifyItemRangeChanged(i, stringList.size());
-                        SharedList sharedList = new SharedList();
-                        sharedList.removeFavorite(context, i);
+                        sharedList.clearFavorite(context);
+                        sharedList.saveFavorites(context, stringList);
                         Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
+
                     }
                 });
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -151,7 +134,7 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         return stringList.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView item, date;
         CardView cardView;
 
@@ -160,6 +143,14 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
             item = itemView.findViewById(R.id.item_history);
             date = itemView.findViewById(R.id.date);
             cardView = itemView.findViewById(R.id.card);
+
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            //Toast.makeText(context, String.valueOf(stringList.size()), Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 }

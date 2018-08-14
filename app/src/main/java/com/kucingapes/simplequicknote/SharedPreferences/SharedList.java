@@ -34,10 +34,6 @@ public class SharedList {
             Type type = new TypeToken<List<ModelHistory>>() {}.getType();
             favorites = gson.fromJson(jsonFavorites, type);
 
-            /*ModelHistory[] favoriteItems = gson.fromJson(jsonFavorites,
-                    ModelHistory[].class);
-            favorites = Arrays.asList(favoriteItems);
-            favorites = new ArrayList<>(favorites);*/
         } else
             return null;
 
@@ -53,7 +49,17 @@ public class SharedList {
         saveFavorites(context, favorites);
     }
 
-    private void saveFavorites(Context context, List<ModelHistory> favorites) {
+    public void clearFavorite(Context context) {
+        List<ModelHistory> favorites = getFavorites(context);
+        if (favorites == null)
+            favorites = new ArrayList<>();
+
+        favorites.clear();
+        saveFavorites(context, favorites);
+    }
+
+
+    public void saveFavorites(Context context, List<ModelHistory> favorites) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
 
@@ -70,10 +76,12 @@ public class SharedList {
 
     public void removeFavorite(Context context, int pos) {
         ArrayList<ModelHistory> favorites = getFavorites(context);
-        if (favorites != null) {
+        /*if (favorites != null) {
             favorites.remove(pos);
             saveFavorites(context, favorites);
-        }
+        }*/
+        favorites.remove(pos);
+        saveFavorites(context, favorites);
     }
 
     public int getSize(Context context) {

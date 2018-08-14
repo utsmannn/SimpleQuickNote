@@ -32,6 +32,7 @@ import com.kucingapes.simplequicknote.Services.OnHomePressedListener;
 import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -265,10 +266,17 @@ public class MainActivity extends AppCompatActivity {
 
             String json = preferences.getString(INDEX, null);
 
-            ModelHistory modelHistory = new ModelHistory(result, strDate, color);
             SharedList sharedList = new SharedList();
-
             List<ModelHistory> modelHistories = sharedList.getFavorites(getApplicationContext());
+
+            if (modelHistories == null) {
+                modelHistories = new ArrayList<>();
+            }
+
+            int id = modelHistories.size();
+
+            ModelHistory modelHistory = new ModelHistory(result, strDate, color, id);
+
 
             if (json != null) {
                 if (!result.equals("")) {

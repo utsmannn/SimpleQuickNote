@@ -39,6 +39,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
+    implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

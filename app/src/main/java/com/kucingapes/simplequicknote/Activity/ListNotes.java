@@ -33,24 +33,25 @@ public class ListNotes extends AppCompatActivity {
 
     private ArrayList<ModelHistory> stringList;
     private HistoryAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_notes);
 
-        RecyclerView recyclerView = findViewById(R.id.list_note);
+        recyclerView = findViewById(R.id.list_note);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         LayoutMarginDecoration marginDecoration = new LayoutMarginDecoration(2, 10);
         marginDecoration.setPadding(recyclerView, 10, 10, 10, 10);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(marginDecoration);
-        setItemList(recyclerView);
+        setItemList();
 
     }
 
-    private void setItemList(RecyclerView recyclerView) {
+    private void setItemList() {
         SharedList sharedList = new SharedList();
         stringList = sharedList.getFavorites(getApplicationContext());
 
@@ -65,7 +66,6 @@ public class ListNotes extends AppCompatActivity {
         }
 
         adapter = new HistoryAdapter(stringList, this);
-        //Collections.reverse(stringList);
 
         if (stringList.size() > 0) {
             sortListByDate(stringList);
@@ -155,52 +155,39 @@ public class ListNotes extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 SharedList sharedList = new SharedList();
+                Boolean status = data.getBooleanExtra("status", false);
 
-                long mDate = System.currentTimeMillis();
+                if (status) {
+                    long mDate = System.currentTimeMillis();
 
-                String note = data.getStringExtra("note");
-                String date = data.getStringExtra("date");
-                int color = data.getIntExtra("color", getResources().getColor(R.color.card));
-                int pos = data.getIntExtra("position", 0);
-                int id = data.getIntExtra("id", (int) mDate);
+                    String note = data.getStringExtra("note");
+                    String date = data.getStringExtra("date");
+                    int color = data.getIntExtra("color", getResources().getColor(R.color.card));
+                    int pos = data.getIntExtra("position", 0);
+                    int id = data.getIntExtra("id", (int) mDate);
 
-                stringList.remove(pos);
-                adapter.notifyItemRemoved(pos);
-                ModelHistory modelHistory = new ModelHistory(note, date, color, id);
-                //stringList.add(modelHistory);
-                stringList.add(modelHistory);
-                //adapter.notifyItemMoved(stringList.size(), 0);
-                adapter.notifyItemRangeRemoved(pos, stringList.size());
+                    stringList.remove(pos);
+                    adapter.notifyItemRemoved(pos);
+                    ModelHistory modelHistory = new ModelHistory(note, date, color, id);
+                    stringList.add(modelHistory);
+                    adapter.notifyItemRangeRemoved(pos, stringList.size());
+                    sharedList.saveFavorites(getApplicationContext(), stringList);
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), ListNotes.class));
 
-                sharedList.saveFavorites(getApplicationContext(), stringList);
 
-                if (stringList.size() > 0) {
-                    sortListByDate(stringList);
-                    adapter.notifyDataSetChanged();
+                } if (!status) {
+                    int position = data.getIntExtra("position", 0);
+                    stringList.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    adapter.notifyItemRangeRemoved(position, stringList.size());
+                    sharedList.saveFavorites(getApplicationContext(), stringList);
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), ListNotes.class));
+
                 }
 
-                /*new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ListNotes.this, "nh", Toast.LENGTH_SHORT).show();
-                        if (stringList.size() > 0) {
-                            sortListByDate(stringList);
-                            adapter.notifyDataSetChanged();
-                        }
 
-                        //finish();
-                        //startActivity(new Intent(getApplicationContext(), ListNotes.class));
-                    }
-                }, 1000);*/
-
-                //sortListByDate(stringList);
-
-                /*if (stringList.size() > 0) {
-                }*/
-
-                //recreate();
-
-                //Toast.makeText(this, note+" "+date, Toast.LENGTH_SHORT).show();
             }
         }
     }

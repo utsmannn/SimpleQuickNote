@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             int id = (int) toId;
-            ModelHistory modelHistory = new ModelHistory(result, strDate, color, id);
+            ModelHistory modelHistory = new ModelHistory(result, strDate, color, id, "Timer off", 0);
 
 
             if (json != null) {

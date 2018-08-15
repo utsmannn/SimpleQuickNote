@@ -20,7 +20,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/roboto_slab"
             android:gravity="top"
-            android:lines="10"
+            android:lines="200"
             android:padding="10dp"
             android:textColor="#000000"
             android:textColorHighlight="@color/colorPrimary"

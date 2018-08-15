@@ -102,31 +102,6 @@ public class ListNotes extends AppCompatActivity {
             @SuppressLint("SimpleDateFormat")
             @Override
             public int compare(ModelHistory modelHistory, ModelHistory t1) {
-                /*String dateString1 = modelHistory.getDate();
-                String dateString2 = t1.getDate();
-
-                Date date1 = null;
-                try {
-                    date1 = new SimpleDateFormat("dd MMMM YYYY / HH:mm:ss").parse(dateString1);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Date date2 = null;
-                try {
-                    date2 = new SimpleDateFormat("dd MMMM YYYY / HH:mm:ss").parse(dateString2);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                long milis1 = 0;
-                if (date1 != null) {
-                    milis1 = date1.getTime();
-                }
-                long milis2 = 0;
-                if (date2 != null) {
-                    milis2 = date2.getTime();
-                }*/
-
                 return modelHistory.getId() > t1.getId() ? -1 : 0;
             }
         });
@@ -165,11 +140,14 @@ public class ListNotes extends AppCompatActivity {
                     int color = data.getIntExtra("color", getResources().getColor(R.color.card));
                     int pos = data.getIntExtra("position", 0);
                     int id = data.getIntExtra("id", (int) mDate);
+                    //boolean timer = data.getBooleanExtra("timer", false);
+                    String timerDate = data.getStringExtra("timerDate");
+                    long futureMilis = data.getLongExtra("futuremilis", 0);
 
 
                     stringList.remove(pos);
                     adapter.notifyItemRemoved(pos);
-                    ModelHistory modelHistory = new ModelHistory(note, date, color, id);
+                    ModelHistory modelHistory = new ModelHistory(note, date, color, id, timerDate, futureMilis);
                     stringList.add(modelHistory);
                     adapter.notifyItemRangeRemoved(pos, stringList.size());
                     sharedList.saveFavorites(getApplicationContext(), stringList);
@@ -187,7 +165,6 @@ public class ListNotes extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), ListNotes.class));
 
                 }
-
 
             }
         }

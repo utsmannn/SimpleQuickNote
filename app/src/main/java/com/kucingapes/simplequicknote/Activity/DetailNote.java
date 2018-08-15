@@ -1,7 +1,9 @@
 package com.kucingapes.simplequicknote.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -12,10 +14,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,24 +36,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kucingapes.simplequicknote.R;
+import com.kucingapes.simplequicknote.Services.NotifReceiver;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
+import java.util.TimeZone;
 
 public class DetailNote extends AppCompatActivity {
 
     private EditText editText;
     private String note;
     private int position;
-    private int color, changeColor;
+    private int color;
+    private String timerDate;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
     private BottomSheetBehavior sheetBehavior;
+    //private boolean statTimer;
+    private long nowMilis = 0;
+    private long futureMilis;
+
+    private Switch timerSwitch;
 
     @SuppressLint("NewApi")
     @Override
@@ -57,6 +72,8 @@ public class DetailNote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_note);
         LinearLayout layoutBotom = findViewById(R.id.layout_bottom);
+        timerSwitch = findViewById(R.id.switch_toggle);
+
 
         sheetBehavior = BottomSheetBehavior.from(layoutBotom);
 
@@ -65,7 +82,37 @@ public class DetailNote extends AppCompatActivity {
         String date = bundle.getString("date");
         color = bundle.getInt("color");
         position = bundle.getInt("position");
+        futureMilis = bundle.getLong("futuremilis");
+        //timer = bundle.getBoolean("timer");
+        //statTimer = bundle.getBoolean("timer");
+        timerDate = bundle.getString("timerDate");
 
+
+
+
+        if (timerDate != null) {
+            Date dates;
+            try {
+                //dates = new SimpleDateFormat("yyyy.MMMMM.dd HH:mm", Locale.ENGLISH).parse(input);
+                dates = new SimpleDateFormat("dd MMMMM yyyy / HH:mm", Locale.ENGLISH).parse(timerDate);
+                futureMilis = dates.getTime();
+                nowMilis = System.currentTimeMillis();
+
+                if (nowMilis <= futureMilis) {
+                    //Toast.makeText(this, "depannya", Toast.LENGTH_SHORT).show();
+                    timerSwitch.setChecked(true);
+                } else {
+                    //Toast.makeText(this, "belakang", Toast.LENGTH_SHORT).show();
+                    timerSwitch.setChecked(false);
+                }
+
+                Log.d("milisdate-anjay", String.valueOf(futureMilis));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Log.d("tanggaln-anjay", String.valueOf(timerDate));
+        }
 
         int actionColor = getColorDarken(color, 0.8f);
         int statusColor = getColorDarken(color, 0.7f);
@@ -101,43 +148,14 @@ public class DetailNote extends AppCompatActivity {
         });
 
         layoutBotom.setBackgroundColor(actionColor);
-        setupButtonOption(layoutBotom);
-
+        setupButtonOption();
 
 
     }
 
-    private void setupButtonOption(final LinearLayout layoutBotom) {
-        ImageView mColor = findViewById(R.id.color_btn);
+    private void setupButtonOption() {
         ImageView mCopy = findViewById(R.id.copy_btn);
         ImageView mShare = findViewById(R.id.share_btn);
-
-        mColor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int[] androidColors = getResources().getIntArray(R.array.androidcolors);
-                changeColor = androidColors[new Random().nextInt(androidColors.length)];
-
-                int actionColor = getColorDarken(changeColor, 0.8f);
-                int statusColor = getColorDarken(changeColor, 0.7f);
-
-                ActionBar actionBar = getSupportActionBar();
-                if (actionBar != null) {
-                    actionBar.setBackgroundDrawable(new ColorDrawable(actionColor));
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Window window = getWindow();
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    window.setStatusBarColor(statusColor);
-                    window.setBackgroundDrawable(new ColorDrawable(changeColor));
-                }
-
-                color = changeColor;
-
-                layoutBotom.setBackgroundColor(actionColor);
-            }
-        });
 
         mCopy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,17 +186,9 @@ public class DetailNote extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void setupPickerTimer(int actionColor) {
         final TextView textDate = findViewById(R.id.date_detail);
-
-        final String on = "Timer on";
-        final String off = "Timer off";
-
-        final Switch timerSwitch = findViewById(R.id.switch_toggle);
-        timerSwitch.setChecked(false);
-        timerSwitch.setText(off);
-
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -186,6 +196,9 @@ public class DetailNote extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
+
+        textDate.setText(timerDate);
+        //timerSwitch.setChecked(timer);
 
         final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
             @SuppressLint("SetTextI18n")
@@ -195,9 +208,25 @@ public class DetailNote extends AppCompatActivity {
                 mHour = hourOfDay;
                 mMinute = minute;
 
+                String sMonth = getMonth(mMonth);
+
+                timerDate = mDay + " " + sMonth + " " + mYear + " / " + mHour + ":" + mMinute;
+
                 timerSwitch.setChecked(true);
-                timerSwitch.setText(on);
-                textDate.setText(mDay + "/" + mMonth + "/" + mYear + " " + mHour + ":" + mMinute);
+                textDate.setText(timerDate);
+                //timer = true;
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(mYear, mMonth, mDay, mHour, mMinute, 0);
+                long timeMilis = cal.getTimeInMillis();
+
+                long nowTime = System.currentTimeMillis();
+
+                int delay = (int) (timeMilis - nowTime);
+
+                String content = editText.getText().toString();
+                scheduleNotification(content, delay);
+
 
             }
         }, hour, minute, true);
@@ -205,7 +234,6 @@ public class DetailNote extends AppCompatActivity {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 timerSwitch.setChecked(false);
-                timerSwitch.setText(off);
             }
         });
         timePickerDialog.vibrate(false);
@@ -214,7 +242,6 @@ public class DetailNote extends AppCompatActivity {
         final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
 
                 mYear = year;
                 mMonth = monthOfYear;
@@ -229,7 +256,6 @@ public class DetailNote extends AppCompatActivity {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 timerSwitch.setChecked(false);
-                timerSwitch.setText(off);
             }
         });
         datePickerDialog.vibrate(false);
@@ -240,6 +266,11 @@ public class DetailNote extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     datePickerDialog.show(getFragmentManager(), "Select date");
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    //timer = false;
+                    timerDate = "Timer off";
+                    textDate.setText(timerDate);
                 }
             }
         });
@@ -253,6 +284,10 @@ public class DetailNote extends AppCompatActivity {
         return Color.argb(a, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
     }
 
+    public String getMonth(int month) {
+        return new DateFormatSymbols().getMonths()[month];
+    }
+
     @Override
     public void onBackPressed() {
         final String change = editText.getText().toString();
@@ -264,7 +299,8 @@ public class DetailNote extends AppCompatActivity {
         long date = System.currentTimeMillis();
         final int bah = (int) date;
 
-        if (!change.equals(note)) {
+
+        if (!change.equals(note) || nowMilis <= futureMilis) {
             String KEY = "resultKey";
             SharedPreferences preferences = DetailNote.this.getSharedPreferences("ganteng", MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
@@ -278,12 +314,13 @@ public class DetailNote extends AppCompatActivity {
             intent.putExtra("color", color);
             intent.putExtra("position", position);
             intent.putExtra("id", bah);
+            //intent.putExtra("timer", timer);
+            intent.putExtra("futuremilis", futureMilis);
+            intent.putExtra("timerDate", timerDate);
             intent.putExtra("status", true);
             setResult(RESULT_OK, intent);
         }
         finish();
-
-
 
     }
 
@@ -323,5 +360,17 @@ public class DetailNote extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void scheduleNotification(String content, int delay) {
+        Intent notificationIntent = new Intent(this, NotifReceiver.class);
+        //notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotifReceiver.CONTENT, content);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+
     }
 }

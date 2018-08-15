@@ -82,8 +82,6 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
             e.printStackTrace();
         }
 
-
-
         holder.item.setText(modelHistory.getText());
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +102,8 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
                 intent.putExtra("position", holder.getAdapterPosition());
                 intent.putExtra("size", stringList.size());
                 intent.putExtra("id", modelHistory.getId());
+                intent.putExtra("futuremilis", modelHistory.getFutureMilis());
+                intent.putExtra("timerDate", modelHistory.getTimerDate());
                 ((AppCompatActivity)context).startActivityForResult(intent,  1);
             }
         });

@@ -28,7 +28,9 @@
             android:id="@+id/item_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="container"/>
+            android:text="container"
+            android:maxLines="6"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 

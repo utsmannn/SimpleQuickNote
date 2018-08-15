@@ -166,6 +166,7 @@ public class ListNotes extends AppCompatActivity {
                     int pos = data.getIntExtra("position", 0);
                     int id = data.getIntExtra("id", (int) mDate);
 
+
                     stringList.remove(pos);
                     adapter.notifyItemRemoved(pos);
                     ModelHistory modelHistory = new ModelHistory(note, date, color, id);

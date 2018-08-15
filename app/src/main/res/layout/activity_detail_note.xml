@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".Activity.DetailNote">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_margin="10dp">
 
         <EditText
             android:id="@+id/note_text"
@@ -19,36 +20,19 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/roboto_slab"
             android:gravity="top"
-            android:lines="7"
+            android:lines="10"
             android:padding="10dp"
             android:textColor="#000000"
             android:textColorHighlight="@color/colorPrimary"
             android:textColorHint="#464646"
             android:textCursorDrawable="@null"
             android:textSize="16sp"
-            tools:ignore="UnusedAttribute" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <Switch
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/switch_toggle"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/date_detail"/>
+            tools:ignore="UnusedAttribute"/>
 
 
-        </LinearLayout>
+    </RelativeLayout>
 
-    </LinearLayout>
+    <include layout="@layout/option_bottom"/>
 
 
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

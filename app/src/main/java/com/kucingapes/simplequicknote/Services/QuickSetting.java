@@ -37,8 +37,6 @@ public class QuickSetting extends TileService {
     public void onClick() {
         super.onClick();
 
-        /*Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("com.kucingapes.simplequicknote.Activity.OptionActivity");*/
         startActivityAndCollapse(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

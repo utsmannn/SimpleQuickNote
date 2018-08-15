@@ -24,6 +24,11 @@ import com.kucingapes.simplequicknote.OnItemClickListener;
 import com.kucingapes.simplequicknote.R;
 import com.kucingapes.simplequicknote.SharedPreferences.SharedList;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class
@@ -56,18 +61,30 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         return new Holder(view);
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, @SuppressLint("RecyclerView") final int i) {
         final ModelHistory modelHistory = stringList.get(i);
 
-        @SuppressLint("InflateParams") final View dialogView = LayoutInflater.from(context)
-                .inflate(R.layout.delete_dialog, null);
+        try {
+            String mDate = modelHistory.getDate()+":00";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyy / HH:mm:ss");
 
-        TextView textView = dialogView.findViewById(R.id.messege);
-        textView.setText(modelHistory.getText());
+            Date date = dateFormat.parse(mDate);
+
+            PrettyTime prettyTime = new PrettyTime();
+            String fromNow = prettyTime.format(date);
+
+            holder.date.setText(fromNow);
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
 
         holder.item.setText(modelHistory.getText());
-        holder.date.setText(modelHistory.getDate());
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,42 +104,11 @@ HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
                 intent.putExtra("position", holder.getAdapterPosition());
                 intent.putExtra("size", stringList.size());
                 intent.putExtra("id", modelHistory.getId());
-                //context.startActivity(intent);
                 ((AppCompatActivity)context).startActivityForResult(intent,  1);
-                //((AppCompatActivity)context).finish();
             }
         });
         holder.cardView.setCardBackgroundColor(modelHistory.getColor());
-        /*view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Remove item");
-                builder.setPositiveButton("REMOVE", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        SharedList sharedList = new SharedList();
-
-                        stringList.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(i);
-                        notifyItemRangeChanged(i, stringList.size());
-                        sharedList.clearFavorite(context);
-                        sharedList.saveFavorites(context, stringList);
-                        Toast.makeText(context, "item deleted", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(context, String.valueOf(holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                return true;
-            }
-        });*/
     }
 
 

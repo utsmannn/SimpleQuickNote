@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
     implementation 'com.wdullaer:materialdatetimepicker:3.6.3'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 }
 
 apply plugin: 'com.google.gms.google-services'
